@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Milk, ShoppingCart, Bell, Sun, Moon, User } from 'lucide-react';
+import { Home, ShoppingCart, Bell, Sun, Moon, User } from 'lucide-react';
 
 export default function HeaderNav() {
   const [theme, setTheme] = useState('system');
@@ -22,7 +22,7 @@ export default function HeaderNav() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <a href="#home" className="flex items-center gap-3">
-            <Milk className="h-7 w-7 text-emerald-600 dark:text-emerald-400" />
+            <Home className="h-7 w-7 text-emerald-600 dark:text-emerald-400" />
             <span className="text-lg font-semibold tracking-tight text-gray-900 dark:text-gray-100">
               Sathya Dairy Farms
             </span>
