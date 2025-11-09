@@ -1,67 +1,65 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Home, ShoppingCart, Bell, Sun, Moon, User } from 'lucide-react';
 
-export default function HeaderNav() {
-  const [theme, setTheme] = useState('system');
-
-  useEffect(() => {
-    const saved = localStorage.getItem('theme') || 'system';
-    setTheme(saved);
-  }, []);
+function useTheme() {
+  const [theme, setTheme] = useState(
+    typeof window !== 'undefined'
+      ? (localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'))
+      : 'light'
+  );
 
   useEffect(() => {
     const root = document.documentElement;
-    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const isDark = theme === 'dark' || (theme === 'system' && systemDark);
-    root.classList.toggle('dark', isDark);
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
     localStorage.setItem('theme', theme);
   }, [theme]);
 
+  return { theme, setTheme };
+}
+
+export default function HeaderNav() {
+  const { theme, setTheme } = useTheme();
+
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-gray-200/60 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:border-gray-800 dark:bg-black/60">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <a href="#home" className="flex items-center gap-3">
-            <Home className="h-7 w-7 text-emerald-600 dark:text-emerald-400" />
-            <span className="text-lg font-semibold tracking-tight text-gray-900 dark:text-gray-100">
-              Sathya Dairy Farms
-            </span>
-          </a>
-
-          <nav className="hidden md:flex items-center gap-6 text-sm">
-            <a className="text-gray-700 hover:text-emerald-600 dark:text-gray-300 dark:hover:text-emerald-400" href="#products">Products</a>
-            <a className="text-gray-700 hover:text-emerald-600 dark:text-gray-300 dark:hover:text-emerald-400" href="#subscriptions">Subscriptions</a>
-            <a className="text-gray-700 hover:text-emerald-600 dark:text-gray-300 dark:hover:text-emerald-400" href="#login">Login</a>
-          </nav>
-
-          <div className="flex items-center gap-2">
-            <button aria-label="Notifications" className="rounded-lg p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800">
-              <Bell className="h-5 w-5" />
-            </button>
-            <button aria-label="Cart" className="rounded-lg p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800">
-              <ShoppingCart className="h-5 w-5" />
-            </button>
-            <div className="h-6 w-px bg-gray-200 dark:bg-gray-800 mx-1" />
-            <div className="hidden sm:flex items-center gap-1 text-xs md:text-sm">
-              <User className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-              <span className="text-gray-600 dark:text-gray-300">Official Login:</span>
-              <a href="#admin" className="font-medium text-emerald-600 hover:underline dark:text-emerald-400">Admin</a>
-              <span className="text-gray-400">/</span>
-              <a href="#agent" className="font-medium text-emerald-600 hover:underline dark:text-emerald-400">Agent</a>
-            </div>
-            <button
-              onClick={() => setTheme(theme === 'dark' ? 'light' : theme === 'light' ? 'system' : 'dark')}
-              className="ml-2 rounded-lg p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
-              aria-label="Toggle theme"
-              title="Toggle theme"
-            >
-              {theme === 'dark' ? <Moon className="h-5 w-5" /> : theme === 'light' ? <Sun className="h-5 w-5" /> : (
-                <Sun className="h-5 w-5" />
-              )}
-            </button>
-          </div>
+    <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/60 bg-white/80 dark:bg-neutral-900/80 border-b border-neutral-200 dark:border-neutral-800">
+      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Home className="h-6 w-6 text-green-600" />
+          <Link to="/" className="text-lg font-semibold tracking-tight text-neutral-800 dark:text-neutral-100">Sathya Dairy Farms</Link>
         </div>
-      </div>
+        <div className="hidden md:flex items-center gap-6 text-sm">
+          <a href="#home" className="text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white">Home</a>
+          <a href="#products" className="text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white">Products</a>
+          <a href="#subscriptions" className="text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white">Subscriptions</a>
+          <a href="#login" className="text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white">Login</a>
+          <a href="#admin" className="text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white">Admin</a>
+          <a href="#agent" className="text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white">Agent</a>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            aria-label="Toggle theme"
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="inline-flex items-center justify-center h-9 w-9 rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition"
+          >
+            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </button>
+          <button className="inline-flex items-center justify-center h-9 w-9 rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition" aria-label="Notifications">
+            <Bell className="h-5 w-5" />
+          </button>
+          <button className="inline-flex items-center justify-center h-9 w-9 rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition" aria-label="Cart">
+            <ShoppingCart className="h-5 w-5" />
+          </button>
+          <button className="ml-2 hidden sm:inline-flex items-center gap-2 h-9 px-3 rounded-md bg-green-600 text-white hover:bg-green-700 transition" aria-label="Profile">
+            <User className="h-4 w-4" />
+            <span>Account</span>
+          </button>
+        </div>
+      </nav>
     </header>
   );
 }
