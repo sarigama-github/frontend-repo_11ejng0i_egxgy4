@@ -1,7 +1,6 @@
 import HeaderNav from './components/HeaderNav';
 import Hero from './components/Hero';
 import ProductGrid from './components/ProductGrid';
-import SubscriptionPreview from './components/SubscriptionPreview';
 import AuthPanels from './components/AuthPanels';
 
 function App() {
@@ -11,7 +10,6 @@ function App() {
       <main>
         <Hero />
         <ProductGrid />
-        <SubscriptionPreview />
         <AuthPanels />
       </main>
       <footer className="border-t border-gray-200 py-10 text-center text-sm text-gray-600 dark:border-gray-800 dark:text-gray-300">
